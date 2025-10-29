@@ -12,5 +12,6 @@
     };
     window.spyholeEvents = [];
 </script>
+<input type="hidden" id="spyhole-id" value="">
 <script type="text/javascript" src="{!! asset('/vendor/laravel-spyhole/rrweb.min.js') !!}"></script>
 <script type="text/javascript" src="{!! asset('/vendor/laravel-spyhole/recording-handler.js') !!}"></script>

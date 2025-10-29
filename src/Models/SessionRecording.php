@@ -25,11 +25,11 @@ class SessionRecording extends Model
 
     public function getRecordingsAttribute()
     {
-        return json_decode(gzdecode(base64_decode($this->attributes['recordings'])));
+        return json_decode($this->attributes['recordings']);
     }
 
     public function setRecordingsAttribute($value)
     {
-        $this->attributes['recordings'] = base64_encode(gzencode(json_encode($value)));
+        $this->attributes['recordings'] = json_encode($value);
     }
 }

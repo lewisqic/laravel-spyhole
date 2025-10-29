@@ -16,7 +16,6 @@ return new class extends Migration
             $table->string('path');
             $table->string('session_id');
             $table->binary('recordings');
-            $table->foreignId('user_id')->nullable()->constrained()->nullOnDelete(); // Follows convention for foreign keys
             $table->timestamps();
         });
     }

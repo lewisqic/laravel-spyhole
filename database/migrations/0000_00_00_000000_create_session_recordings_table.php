@@ -4,23 +4,28 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-
-class CreateSessionRecordingsTable extends Migration
+return new class extends Migration
 {
-    public function up()
+    /**
+     * Run the migrations.
+     */
+    public function up(): void
     {
-        Schema::create('session_recordings', function (Blueprint $table) {
-            $table->bigIncrements('id');
+        Schema::create('session_recordings', function (Blueprint $table): void {
+            $table->id(); // Automatically sets an auto-incrementing unsigned BigInt primary key column
             $table->string('path');
             $table->string('session_id');
             $table->binary('recordings');
-            $table->string('user_id')->nullable();
+            $table->foreignId('user_id')->nullable()->constrained()->nullOnDelete(); // Follows convention for foreign keys
             $table->timestamps();
         });
     }
 
-    public function down()
+    /**
+     * Reverse the migrations.
+     */
+    public function down(): void
     {
         Schema::dropIfExists('session_recordings');
     }
-}
+};

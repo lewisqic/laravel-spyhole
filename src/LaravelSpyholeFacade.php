@@ -1,11 +1,11 @@
 <?php
 
-namespace Kalizi\LaravelSpyhole;
+namespace Lewisqic\LaravelSpyhole;
 
 use Illuminate\Support\Facades\Facade;
 
 /**
- * @see \Kalizi\LaravelSpyhole\Skeleton\SkeletonClass
+ * @see \Lewisqic\LaravelSpyhole\Skeleton\SkeletonClass
  */
 class LaravelSpyholeFacade extends Facade
 {

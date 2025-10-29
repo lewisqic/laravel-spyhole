@@ -1,8 +1,8 @@
 <?php
 
-namespace Kalizi\LaravelSpyhole\Tests;
+namespace Lewisqic\LaravelSpyhole\Tests;
 
-use Kalizi\LaravelSpyhole\LaravelSpyholeServiceProvider;
+use Lewisqic\LaravelSpyhole\LaravelSpyholeServiceProvider;
 
 class TestCase extends \Orchestra\Testbench\TestCase
 {

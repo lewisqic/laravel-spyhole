@@ -25,7 +25,7 @@ class StoreEntryRequest extends FormRequest
             'recording' => 'sometimes|string',
             // recorded path
             'path' => 'required|string',
-            'type' => 'sometimes|string',
+            'type' => 'sometimes',
         ];
     }
 }

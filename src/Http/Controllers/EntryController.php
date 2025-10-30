@@ -48,8 +48,8 @@ class EntryController extends Controller
         if ($recordingId === null) {
             $recording = new SessionRecording();
             $recording->session_id = $sessionId;
-            $recording->user_id = $userId;
             $recording->path = $request->get('path');
+            $recording->type = $request->get('type');
             $recording->recordings = $request->get('frames');
         } else {
             $recording = SessionRecording::wherePath($request->get('path'))

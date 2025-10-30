@@ -6,6 +6,7 @@ const sendRecordings = (recordings) => {
         throw new Error('Missing spyhole configuration');
 
     recordings['path'] = window.location.pathname;
+    recordings['type'] = window.spyholeConfig.type;
 
     fetch(window.spyholeConfig.storeUrl, {
         method: 'POST',
@@ -20,7 +21,9 @@ const sendRecordings = (recordings) => {
         .then((res) => {
             if (res.success) {
                 window.spyholeDom.currentPage.recording = res.recording;
-                document.getElementById('spyhole-id').value = res.recording;
+                if (document.getElementById(window.spyholeConfig.idValue).value === '') {
+                    document.getElementById(window.spyholeConfig.idValue).value = res.recording;
+                }
             }
         })
         .catch(() => {

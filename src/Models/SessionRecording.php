@@ -9,9 +9,9 @@ use Illuminate\Database\Eloquent\Model;
  *
  * @property int id
  * @property string path
+ * @property string type
  * @property string session_id
  * @property array recordings
- * @property string|null user_id
  * @package Lewisqic\LaravelSpyhole\Models
  */
 class SessionRecording extends Model

@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('session_recordings', function (Blueprint $table): void {
             $table->id(); // Automatically sets an auto-incrementing unsigned BigInt primary key column
             $table->string('path');
+            $table->string('type')->nullable();
             $table->string('session_id');
             $table->binary('recordings');
             $table->timestamps();

@@ -12,7 +12,7 @@ const sendRecordings = (recordings) => {
         method: 'POST',
         body: JSON.stringify(recordings),
         headers: {
-            Accept: 'application/json',
+            'Accept': 'application/json',
             'Content-Type': 'application/json',
             'X-CSRF-Token': window.spyholeConfig.xsrf,
         },
@@ -54,7 +54,7 @@ const initializeRecordings = () => {
 
             // push event into the events array
             if (event.type !== undefined && event.data !== undefined) {
-                indow.spyholeEvents.push(event);
+                window.spyholeEvents.push(event);
             }
 
             if (

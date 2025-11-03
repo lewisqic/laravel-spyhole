@@ -23,6 +23,11 @@ class EntryController extends Controller
             }
         }
 
+        // get frames directly from raw input
+        $raw = file_get_contents('php://input');
+        $data = json_decode($raw, true);
+        $frames = $data['frames'] ?? [];
+
         if (config('laravel-spyhole.track_request_session_id')) {
             $sessionId = $request->session()->getId();
         } else {
@@ -52,7 +57,7 @@ class EntryController extends Controller
             if (!empty($request->get('type'))) {
                 $recording->type = $request->get('type');
             }
-            $recording->recordings = $request->get('frames');
+            $recording->recordings = $frames;
         } else {
             $recording = SessionRecording::wherePath($request->get('path'))
                 ->whereId($recordingId)
@@ -65,7 +70,7 @@ class EntryController extends Controller
             // Merge frames from the same session
             $recording->recordings = array_merge(
                 $recording->recordings,
-                $request->get('frames')
+                $frames
             );
         }
 

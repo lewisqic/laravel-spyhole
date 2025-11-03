@@ -1,16 +1,16 @@
-const sendRecordings = (recordings) => {
+const sendRecordings = (payload) => {
     if (
         !window.hasOwnProperty('spyholeConfig') ||
         !window.spyholeConfig.hasOwnProperty('storeUrl')
     )
         throw new Error('Missing spyhole configuration');
 
-    recordings['path'] = window.location.pathname;
-    recordings['type'] = window.spyholeConfig.type;
+    payload['path'] = window.location.pathname;
+    payload['type'] = window.spyholeConfig.type;
 
     fetch(window.spyholeConfig.storeUrl, {
         method: 'POST',
-        body: JSON.stringify(recordings),
+        body: JSON.stringify(payload),
         headers: {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
@@ -20,14 +20,14 @@ const sendRecordings = (recordings) => {
         .then((res) => res.json())
         .then((res) => {
             if (res.success) {
-                window.spyholeDom.currentPage.recording = res.recording;
+                window.spyholeDom.currentPage.recordingId = res.recordingId;
                 if (document.getElementById(window.spyholeConfig.idValue).value === '') {
-                    document.getElementById(window.spyholeConfig.idValue).value = res.recording;
+                    document.getElementById(window.spyholeConfig.idValue).value = res.recordingId;
                 }
             }
         })
         .catch(() => {
-            setTimeout(() => sendRecordings(recordings), 500);
+            setTimeout(() => sendRecordings(payload), 500);
         });
 };
 
@@ -61,17 +61,15 @@ const initializeRecordings = () => {
                 window.spyholeEvents.length >= window.spyholeConfig.samplingRate
             ) {
                 let payload = {
-                    frames: window.spyholeEvents,
-                    path: window.location.pathname,
+                    frames: window.spyholeEvents
                 };
                 window.spyholeEvents = [];
                 if (!window.spyholeDom.domSent) {
                     payload['scene'] = document.documentElement.innerHTML;
                     window.spyholeDom.domSent = true;
                 }
-                if (window.spyholeDom.currentPage.recording !== null) {
-                    payload['recording'] =
-                        window.spyholeDom.currentPage.recording;
+                if (window.spyholeDom.currentPage.recordingId !== null) {
+                    payload['recordingId'] = window.spyholeDom.currentPage.recordingId;
                 }
                 sendRecordings(payload);
             }
@@ -80,9 +78,13 @@ const initializeRecordings = () => {
 
     window.addEventListener('beforeunload', () => {
         // Send remaining recordings
-        sendRecordings({
-            frames: window.spyholeEvents,
-        });
+        let payload = {
+            frames: window.spyholeEvents
+        };
+        if (window.spyholeDom.currentPage.recordingId !== null) {
+            payload['recordingId'] = window.spyholeDom.currentPage.recordingId;
+        }
+        sendRecordings(payload);
     });
 };
 

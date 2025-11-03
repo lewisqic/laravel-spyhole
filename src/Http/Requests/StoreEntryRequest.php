@@ -22,7 +22,7 @@ class StoreEntryRequest extends FormRequest
             // recording frames
             'frames' => 'required|array',
             // previous recording id (encrypted)
-            'recording' => 'sometimes|string',
+            'recordingId' => 'sometimes|string',
             // recorded path
             'path' => 'required|string',
             'type' => 'sometimes',

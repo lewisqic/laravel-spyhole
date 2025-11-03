@@ -15,17 +15,16 @@ class EntryController extends Controller
     public function store(StoreEntryRequest $request): JsonResponse
     {
         $recordingId = null;
-        if ($request->has('recording')) {
-            $recordingId = (int)decrypt($request->get('recording'));
+        if ($request->has('recordingId')) {
+            $recordingId = (int)decrypt($request->get('recordingId'));
 
             if (SessionRecording::whereId($recordingId)->count() === 0) {
                 throw new NotAcceptableHttpException();
             }
         }
 
-        // get frames directly from raw input
-        $raw = file_get_contents('php://input');
-        $data = json_decode($raw, true);
+        // get frames directly from raw input, don't pull value from $request
+        $data = json_decode($request->getContent(), true);
         $frames = $data['frames'] ?? [];
 
         if (config('laravel-spyhole.track_request_session_id')) {
@@ -78,7 +77,7 @@ class EntryController extends Controller
 
         return response()->json([
             'success' => true,
-            'recording' => encrypt($recording->id),
+            'recordingId' => encrypt($recording->id),
         ]);
     }
 }

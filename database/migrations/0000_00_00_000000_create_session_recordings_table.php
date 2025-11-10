@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string('path');
             $table->string('type')->nullable();
             $table->string('session_id');
-            $table->binary('recordings');
+            $table->longText('recordings');
             $table->timestamps();
         });
     }

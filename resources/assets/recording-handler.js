@@ -23,12 +23,31 @@ const sendRecordings = (payload) => {
                 window.spyholeDom.currentPage.recordingId = res.recordingId;
                 if (document.getElementById(window.spyholeConfig.idValue).value === '') {
                     document.getElementById(window.spyholeConfig.idValue).value = res.recordingId;
+                    // Emit a custom event after successfully saving the recording ID
+                    const customEvent = new CustomEvent('spyholeRecordingSuccess', {
+                        detail: {recordingId: res.recordingId},
+                    });
+                    window.dispatchEvent(customEvent);
                 }
             }
         })
         .catch(() => {
             setTimeout(() => sendRecordings(payload), 500);
         });
+};
+
+const spyholeSendRemainingEvents = () => {
+    if (window.spyholeEvents.length) {
+        // Send remaining recordings
+        let payload = {
+            frames: window.spyholeEvents
+        };
+        window.spyholeEvents = [];
+        if (window.spyholeDom.currentPage.recordingId !== null) {
+            payload['recordingId'] = window.spyholeDom.currentPage.recordingId;
+        }
+        sendRecordings(payload);
+    }
 };
 
 const initializeRecordings = () => {
@@ -45,7 +64,6 @@ const initializeRecordings = () => {
         throw new Error('Missing spyhole configuration');
 
     rrweb.record({
-        maskAllInputs: false,
         maskTextSelector: '[data-spyhole-mask]',
         emit(event) {
             if (!window.hasOwnProperty('spyholeEvents')) {
@@ -77,14 +95,7 @@ const initializeRecordings = () => {
     });
 
     window.addEventListener('beforeunload', () => {
-        // Send remaining recordings
-        let payload = {
-            frames: window.spyholeEvents
-        };
-        if (window.spyholeDom.currentPage.recordingId !== null) {
-            payload['recordingId'] = window.spyholeDom.currentPage.recordingId;
-        }
-        sendRecordings(payload);
+        spyholeSendRemainingEvents();
     });
 };
 

@@ -18,7 +18,7 @@ class EntryController extends Controller
         if ($request->has('recordingId')) {
             $recordingId = (int)decrypt($request->get('recordingId'));
 
-            if (SessionRecording::whereId($recordingId)->count() === 0) {
+            if (! SessionRecording::whereId($recordingId)->exists()) {
                 throw new NotAcceptableHttpException();
             }
         }
@@ -36,7 +36,7 @@ class EntryController extends Controller
                 do {
                     $sessionId = Str::uuid()->toString();
                 } while (
-                    SessionRecording::whereSessionId($sessionId)->count() > 0 &&
+                    SessionRecording::whereSessionId($sessionId)->exists() &&
                     $sessionId !== $request->session()->getId()
                 );
                 session()->put('spyhole_session_id', $sessionId);
@@ -58,9 +58,7 @@ class EntryController extends Controller
             }
             $recording->recordings = $frames;
         } else {
-            $recording = SessionRecording::wherePath($request->get('path'))
-                ->whereId($recordingId)
-                ->first();
+            $recording = SessionRecording::whereKey($recordingId)->first();
 
             if ($recording === null) {
                 throw new NotAcceptableHttpException();

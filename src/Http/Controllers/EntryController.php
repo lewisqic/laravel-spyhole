@@ -16,7 +16,7 @@ class EntryController extends Controller
     {
         $recordingId = null;
         if ($request->has('recordingId')) {
-            $recordingId = (int)decrypt($request->get('recordingId'));
+            $recordingId = (int)decrypt($request->input('recordingId'));
 
             if (! SessionRecording::whereId($recordingId)->exists()) {
                 throw new NotAcceptableHttpException();
@@ -52,9 +52,9 @@ class EntryController extends Controller
         if ($recordingId === null) {
             $recording = new SessionRecording();
             $recording->session_id = $sessionId;
-            $recording->path = $request->get('path');
-            if (!empty($request->get('type'))) {
-                $recording->type = $request->get('type');
+            $recording->path = $request->input('path');
+            if (!empty($request->input('type'))) {
+                $recording->type = $request->input('type');
             }
             $recording->recordings = $frames;
         } else {
